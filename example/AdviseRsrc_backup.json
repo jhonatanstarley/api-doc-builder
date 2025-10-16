@@ -1,0 +1,240 @@
+{
+  "id": "924d7b77-18ee-4a86-8f68-999035eaa5a2",
+  "nomeRecurso": "AdviseRsrc",
+  "versao": {
+    "major": 1,
+    "minor": 0,
+    "patch": 0,
+    "build": 1760582623007
+  },
+  "descricaoGeral": {
+    "autenticacao": "Authorization: Bearer Token",
+    "urlBase": "https://xpto.com.br",
+    "regras": "Todas as rotas exigem a presença de token de acesso no header \"Authorization\" no padrão Bearer (Authorization: Bearer <token>). Caso não seja informado, esteja expirado ou o usuário dono não possua a funcionalidade, a API retornará erro com status HTTP 401."
+  },
+  "metodos": [
+    {
+      "id": "075b84f4-c8c8-4036-893e-d05ff3cb62cf",
+      "nome": "cadastrarPesquisa",
+      "objetivo": "Utilizado para cadastrar um CPF ou CNPJ para busca dos processos judiciais relacionados ao documento.",
+      "tipoHttp": "GET",
+      "parametrosEntrada": [
+        {
+          "id": "533b6b56-eba5-4fa3-9505-9007b7e50383",
+          "nome": "cdUniqueId",
+          "formato": "char(16)",
+          "obrigatorio": true,
+          "descricao": "Código único da requisição ou sessão"
+        },
+        {
+          "id": "e3889242-f016-4bc2-a970-728e95a1adbe",
+          "nome": "cdDocumento",
+          "formato": "char(14)",
+          "obrigatorio": true,
+          "descricao": "CPF ou CNPJ a ser pesquisado (com ou sem máscara)"
+        },
+        {
+          "id": "d5456eb9-a554-4202-81a3-ae0c61644b33",
+          "nome": "qtLimiteRetorno",
+          "formato": "char(3)",
+          "obrigatorio": false,
+          "descricao": "Quantidade máxima de processos a retornar (padrão 150)"
+        },
+        {
+          "id": "7725d95b-dbb0-45f7-847a-8cdd4653c7af",
+          "nome": "cdInstancia",
+          "formato": "char(1)",
+          "obrigatorio": false,
+          "descricao": "Identificador da instância: 1=1ª, 2=2ª, 3=3ª, 4=Todas (padrão 4)"
+        },
+        {
+          "id": "70cb9a6c-6d0d-43d1-b4de-8df61facac04",
+          "nome": "inCadastrarProc",
+          "formato": "char(1)",
+          "obrigatorio": false,
+          "descricao": "Indica se os processos retornados devem ser automaticamente cadastrados para monitoramento. \"S\" ou \"N\" (padrão \"N\")"
+        },
+        {
+          "id": "f9afa005-88a9-4ee9-91cd-e1c9b7696337",
+          "nome": "dtDistribuicao",
+          "formato": "char(10)",
+          "obrigatorio": false,
+          "descricao": "Data mínima de distribuição do processo (yyyy-mm-dd)"
+        },
+        {
+          "id": "8220dace-fa6a-400c-b4a8-3b2ca11b70ea",
+          "nome": "cdsuarioCli",
+          "formato": "char(16)",
+          "obrigatorio": false,
+          "descricao": "Identificador do usuário que está realizando a pesquisa"
+        },
+        {
+          "id": "d0f9a9d0-bbad-4be6-bc01-387b17343053",
+          "nome": "lisAbrangencias",
+          "formato": "evalLista",
+          "obrigatorio": false,
+          "descricao": "Lista de IDs de abrangências para filtrar os resultados da pesquisa"
+        }
+      ],
+      "validacoes": [
+        {
+          "id": "9c4f74fe-88f3-4f95-bba3-a1b463bf9280",
+          "nome": "cdUniqueId",
+          "descricao": "Se nulo ou vazio, retornar 2000 -- \"O cdUniqueId do atendimento é obrigatório\".\nSe cdUniqueId existir e tamanho > 16, 2001 -- \"cdUniqueId não deve exceder 16 caracteres\".\nSe cdUniqueId = 0, 2002 - \"cdUniqueId não pode ser igual a 0\"."
+        },
+        {
+          "id": "b80e3c2f-7382-4c6e-8f09-5b5ed83b7c0b",
+          "nome": "cdDocumento",
+          "descricao": "Se nulo ou vazio, retornar 2003 -- \"Informe o CPF/CNPJ\".\nSe cdDocumento existir e tamanho > 14, 2004 -- \"CPF/CNPJ não deve exceder 14 caracteres\"."
+        },
+        {
+          "id": "4d076ad6-aade-4aa7-a19b-ff2cc3622fcd",
+          "nome": "qtLimiteRetorno",
+          "descricao": "Se qtLimiteRetorno existir e tamanho > 3, 2005 -- \"Limite de retorno não deve exceder 3 dígitos\".\nSe qtLimiteRetorno > 150, 2006 -- \"Limite máximo de 150 processos\"."
+        },
+        {
+          "id": "a5f5ecd7-7638-4d95-a506-4a218191f20f",
+          "nome": "cdInstancia",
+          "descricao": "Se cdInstancia existir e tamanho > 1, 2007 -- \"Instância não deve exceder 1 caractere\".\nSe cdInstancia != '1' e != '2' e != '3' e != '4', 2008 -- \"Instância inválida. Valores aceitos: 1, 2, 3 ou 4\"."
+        },
+        {
+          "id": "1e21cd4c-5cc7-4587-b262-2b0fd76e85dd",
+          "nome": "inCadastrarProc",
+          "descricao": "Se inCadastrarProc existir e tamanho > 1, 2009 -- \"Indicativo de cadastramento não deve exceder 1 caractere\".\nSe inCadastrarProc != 'S' e != 'N', 2010 -- \"Indicativo de cadastramento deve ser 'S' ou 'N'\"."
+        },
+        {
+          "id": "3a9bf462-0124-4e0e-8281-5e74ffb37b0e",
+          "nome": "dtDistribuicao",
+          "descricao": "Se dtDistribuicao existir e tamanho > 10, 2011 -- \"Data de distribuição não deve exceder 10 caracteres\"."
+        },
+        {
+          "id": "d8615e9f-ad7c-43c0-b9ad-2170ec295265",
+          "nome": "cdsuarioCli",
+          "descricao": "Se cdsuarioCli existir e tamanho > 16, 2012 -- \"ID do usuário não deve exceder 16 caracteres\".\nSe cdsuarioCli = 0, 2013 -- \"ID do usuário não pode ser igual a 0\"."
+        }
+      ],
+      "parametrosSaida": [
+        {
+          "id": "38fadeb2-bebb-45b6-9784-cdc8197333c1",
+          "nome": "cdPesquisa",
+          "tipo": "char(128)",
+          "descricao": "Identificador único da pesquisa criada"
+        },
+        {
+          "id": "cdd21787-1480-4b43-b581-0f5570306b73",
+          "nome": "cdSituacao",
+          "tipo": "char(4)",
+          "descricao": "Código da situação da pesquisa"
+        },
+        {
+          "id": "9e77ae08-fa02-4037-ba4c-384eaa8dc821",
+          "nome": "nmSituacao",
+          "tipo": "char(64)",
+          "descricao": "Descrição textual da situação"
+        },
+        {
+          "id": "7d26d530-047b-41df-9ba0-699c6fecbcba",
+          "nome": "dtInclusao",
+          "tipo": "char(20)",
+          "descricao": "Data e hora de criação da pesquisa (yyyy-mm-ddThh:mm:ss)"
+        },
+        {
+          "id": "c65c6d81-194f-478b-b1ed-96a858d42ed0",
+          "nome": "cdRetorno",
+          "tipo": "char(3)",
+          "descricao": "Código de retorno HTTP"
+        },
+        {
+          "id": "3decdba6-3b1b-4284-ab9f-a48aaa9151c9",
+          "nome": "dsRetorno",
+          "tipo": "char(128)",
+          "descricao": "Mensagem de retorno"
+        }
+      ],
+      "descricao": [
+        {
+          "id": "b210bc89-28a3-4371-a673-ba177b49371f",
+          "tipo": "mapeamento",
+          "conteudo": "Descrição\nFazer validações dos parâmetros de entrada.\nMontar os parâmetros de entrada no header com os seguintes campos:\nAuthorization\nValorar Authorization com \"Bearer \" concatenado com cdApiChave.\nMontar os parâmetros no body com os seguintes campos em JSON:\ndocumento\nlimiteRetorno\nidInstancia\nflCadastrarProcesso\ndataDistribuicaoProcesso\nidUsuarioCliente\nabrangencias"
+        },
+        {
+          "id": "5ac1f4b0-f41b-4def-bf2c-26dbfbe698b1",
+          "tipo": "mapeamento",
+          "conteudo": "Valorar documento com cdDocumento.\nSe qtLimiteRetorno = vazio\n    Valorar limiteRetorno com 150\nsenão\n    Valorar limiteRetorno com qtLimiteRetorno\nFim-se"
+        },
+        {
+          "id": "881ff9ce-64e2-452b-9ff2-db2f45cd0d4b",
+          "tipo": "mapeamento",
+          "conteudo": "Se cdInstancia = vazio\n    Valorar cdInstancia com 4\nsenão\n    Valorar idInstancia com cdInstancia\nFim-se"
+        },
+        {
+          "id": "ac5590a5-a095-4dec-8880-2f92b2d2e3eb",
+          "tipo": "mapeamento",
+          "conteudo": "Valorar flCadastrarProcesso com 'false' para inCadastrarProc = 'N' e com 'true' para inCadastrarProc = 'S'."
+        },
+        {
+          "id": "10a8cd21-5feb-4dfa-b3a2-cc962fbd5213",
+          "tipo": "mapeamento",
+          "conteudo": "Se dtDistribuicao = vazio\n    Não montar no body da requisição\nsenão\n    Valorar dataDistribuicaoProcesso com dtDistribuicao\nFim-se"
+        },
+        {
+          "id": "1cfd7409-3042-4f2a-acf4-10eaf9ca1e0c",
+          "tipo": "mapeamento",
+          "conteudo": "Se cdsuarioCli = vazio\n    Não montar no body da requisição\nsenão\n    Valorar idUsuarioCliente com cdsuarioCli\nFim-se"
+        },
+        {
+          "id": "6951ad96-feab-468a-85b7-80a36a41a92e",
+          "tipo": "mapeamento",
+          "conteudo": "Se lisAbrangencias = vazio\n    Não montar no body da requisição\nsenão\n    Valorar abrangencias com lisAbrangencias\nFim-se"
+        },
+        {
+          "id": "a03aa14f-d767-42bd-98a9-96cec3a5bc91",
+          "tipo": "mapeamento",
+          "conteudo": "Chamar o endpoint de produção https://xpto.com.br/core/v1/descoberta-processos/cadastrar-pesquisa-pfpj\nO protocolo é HTTP e método POST."
+        },
+        {
+          "id": "df1c21f9-e8ec-4cea-ba83-d2a360256f82",
+          "tipo": "mapeamento",
+          "conteudo": "Receber o retorno que será JSON com os seguintes campos:\nstatus\n    codigo\n    mensagem\nitens\n    idPesquisaProcessoPFPJ\n    idSitPesquisaProcessoPFPJ\n    nomeSitPesquisaProcessoPFPJ\n    dataHoraInclusao"
+        },
+        {
+          "id": "ab657e5b-bdbe-4d9b-b576-663bf6476605",
+          "tipo": "mapeamento",
+          "conteudo": "Valorar os campos de retorno da seguinte forma:\n - cdRetorno com status.codigo\n - dsRetorno com status.mensagem\n - cdPesquisa com itens.idPesquisaProcessoPFPJ\n - cdSituacao com itens.idSitPesquisaProcessoPFPJ\n - nmSituacao com itens.nomeSitPesquisaProcessoPFPJ\n - dtInclusao com itens.dataHoraInclusao"
+        },
+        {
+          "id": "f5135bfa-4e31-433c-b6c0-be57b9bf13d6",
+          "tipo": "mapeamento",
+          "conteudo": "Exemplo dos parâmetros de entrada no header do Web Service:\nAuthorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        },
+        {
+          "id": "45704a3f-9120-4bee-9951-3ee030bdb533",
+          "tipo": "mapeamento",
+          "conteudo": "Exemplo dos parâmetros no body da requisição do Web Service:\n{\n  \"documento\": \"00000000000\",\n  \"limiteRetorno\": 5,\n  \"idInstancia\": 4,\n  \"flCadastrarProcesso\": false,\n  \"dataDistribuicaoProcesso\": \"2025-01-01\"\n}"
+        },
+        {
+          "id": "83943379-ce9f-479a-8947-2c2f487a6f63",
+          "tipo": "mapeamento",
+          "conteudo": "Exemplo do retorno do Web Service:\n{\n  \"status\": {\n    \"codigo\": 200,\n    \"mensagem\": \"Sucesso ao cadastrar pesquisa.\"\n  },\n  \"itens\": [\n    {\n      \"idPesquisaProcessoPFPJ\": 12345,\n      \"idSitPesquisaProcessoPFPJ\": -1,\n      \"nomeSitPesquisaProcessoPFPJ\": \"Aguardando envio\",\n      \"dataHoraInclusao\": \"2025-10-15T10:05:30\"\n    }\n  ]\n}"
+        }
+      ],
+      "tabelasAuxiliares": [],
+      "exemplos": [
+        {
+          "id": "3662fdd5-61e6-4aea-a23b-d7a90e993444",
+          "tipo": "body",
+          "descricao": "Exemplo dos parâmetros no body da requisição do Web Service:",
+          "conteudo": "{\n  \"documento\": \"00000000000\",\n  \"limiteRetorno\": 5,\n  \"idInstancia\": 4,\n  \"flCadastrarProcesso\": false,\n  \"dataDistribuicaoProcesso\": \"2025-01-01\"\n}"
+        },
+        {
+          "id": "76dc1b20-848d-4017-9498-876d616b00f9",
+          "tipo": "header",
+          "descricao": "Exemplo dos parâmetros de entrada no header do Web Service:",
+          "conteudo": "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+        }
+      ]
+    }
+  ],
+  "criadoEm": "2025-10-15T21:01:17.911Z",
+  "atualizadoEm": "2025-10-16T02:43:43.007Z"
+}
