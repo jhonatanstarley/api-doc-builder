@@ -1,0 +1,79 @@
+{
+  "appId": "com.starleyinterface.apidocbuilder",
+  "productName": "API Doc Builder",
+  "copyright": "Copyright © 2025 Starley Interface",
+  "directories": {
+    "buildResources": "build",
+    "output": "release"
+  },
+  "files": [
+    "dist/**/*",
+    "main.js",
+    "preload.js",
+    "package.json",
+    "license.rtf"
+  ],
+  "extraResources": [
+    {
+      "from": "public",
+      "to": "public",
+      "filter": ["**/*"]
+    }
+  ],
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "public/icon.ico",
+    "artifactName": "${productName}-${version}-Setup.${ext}",
+    "publish": null
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": true,
+    "allowToChangeInstallationDirectory": true,
+    "createDesktopShortcut": true,
+    "createStartMenuShortcut": true,
+    "shortcutName": "API Doc Builder",
+    "license": "license.rtf",
+    "installerIcon": "public/icon.ico",
+    "uninstallerIcon": "public/icon.ico",
+    "installerHeaderIcon": "public/icon.ico",
+    "deleteAppDataOnUninstall": true
+  },
+  "mac": {
+    "target": [
+      {
+        "target": "dmg",
+        "arch": ["x64", "arm64"]
+      }
+    ],
+    "icon": "public/icon.icns",
+    "category": "public.app-category.developer-tools",
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "linux": {
+    "target": [
+      {
+        "target": "AppImage",
+        "arch": ["x64"]
+      },
+      {
+        "target": "deb",
+        "arch": ["x64"]
+      }
+    ],
+    "icon": "public/icon.png",
+    "category": "Development",
+    "artifactName": "${productName}-${version}-${arch}.${ext}"
+  },
+  "publish": {
+    "provider": "github",
+    "owner": "starleyinterface",
+    "repo": "api-doc-builder",
+    "private": false
+  }
+}
